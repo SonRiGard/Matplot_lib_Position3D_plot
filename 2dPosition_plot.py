@@ -1,13 +1,24 @@
+# import numpy as np
+# import matplotlib.pyplot as plt
+# import serial
+# import time 
+# from matplotlib.animation import FuncAnimation
 
-import numpy as np
+# fig = plt.figure()
+# N = 10 #numbers of value in x direction
+
 import matplotlib.pyplot as plt
+import numpy as np
 import serial
 import time 
 from matplotlib.animation import FuncAnimation
 
-fig = plt.figure()
-ax = plt.axes(projection='3d')
-N = 10 #numbers of value in 1 line
+# Define X and Y data
+N=20
+# Create figure and axis objects
+fig, ax = plt.subplots()
+
+
 ser = serial.Serial(
         # Serial Port to read the data from
         port='COM5',
@@ -41,7 +52,7 @@ for i in range(N):
 # time.sleep(10)
 x=ser.readline()
 time.sleep(0.1)
-       
+
 def animate (i):
     x=ser.readline()
     print(x)
@@ -57,10 +68,16 @@ def animate (i):
         zline.pop(0)
         zline.append(float(data[2])) 
         # ax.plot(xline, yline, zs=0, zdir='z', label='curve in (x, y)')
-        # ax.plot(xline, yline, 'r')
-        ax.clear()
-        ax.plot3D(xline, yline, zline, 'red')
-        
-ani = FuncAnimation(plt.gcf(),animate,interval = 10)
-# ax.view_init(elev=20., azim=-35, roll=0)
+        # Plot data
+        ax.clear()  
+        ax.plot(xline, yline, 'red')
+
+# Add title, axes labels, and legend
+ax.set_title('Position tracking!')
+ax.set_xlabel('X-axis')
+ax.set_ylabel('Y-axis')
+ax.legend()
+ani = FuncAnimation(plt.gcf(),animate,interval = 50)
+
+# Show or save the plot
 plt.show()
